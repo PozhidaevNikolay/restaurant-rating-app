@@ -1,22 +1,35 @@
 package org.example.ratingapp.model;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
+@Entity
+@Table(name = "feedbacks")
 public class Feedback {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long visitorId;
-    private Long restaurantId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "visitor_id")
+    @ToString.Exclude
+    private Visitor visitor;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "restaurant_id")
+    @ToString.Exclude
+    private Restaurant restaurant;
+
     private int rating;
+
+    @Column(length = 1000)
     private String comment;
-
-    public Feedback(Long visitorId, Long restaurantId, int rating, String comment) {
-        this.visitorId = visitorId;
-        this.restaurantId = restaurantId;
-        this.rating = rating;
-        this.comment = comment;
-    }
 }
-
