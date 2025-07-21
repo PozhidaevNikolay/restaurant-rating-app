@@ -9,7 +9,7 @@ public class Visitor {
     private Long id;
     private String nickname; // name -> nickname
     private int age;
-    private char gender; // Enum -> char ('M', 'F')
+    private char gender;
 
     public Visitor(String nickname, int age, char gender) {
         this.nickname = nickname;

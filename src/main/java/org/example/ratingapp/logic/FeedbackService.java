@@ -1,33 +1,37 @@
 package org.example.ratingapp.logic;
 
+import org.example.ratingapp.mapper.FeedbackMapper;
 import org.example.ratingapp.model.Feedback;
-import org.example.ratingapp.model.Restaurant;
 import org.example.ratingapp.storage.FeedbackStorage;
 import org.example.ratingapp.storage.RestaurantStorage;
+import org.example.ratingapp.web.dto.FeedbackDtos; // <-- Импортируем DTO
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
     private final FeedbackStorage feedbackStorage;
     private final RestaurantStorage restaurantStorage;
+    private final FeedbackMapper feedbackMapper;
 
-    public FeedbackService(FeedbackStorage feedbackStorage, RestaurantStorage restaurantStorage) {
+    public FeedbackService(FeedbackStorage feedbackStorage, RestaurantStorage restaurantStorage, FeedbackMapper feedbackMapper) {
         this.feedbackStorage = feedbackStorage;
         this.restaurantStorage = restaurantStorage;
+        this.feedbackMapper = feedbackMapper;
     }
 
-    public Feedback leaveFeedback(Feedback feedback) {
+    public FeedbackDtos.FeedbackView leaveFeedback(FeedbackDtos.NewFeedback dto) {
+        Feedback feedback = feedbackMapper.toEntity(dto);
         Feedback savedFeedback = feedbackStorage.create(feedback);
         recalculateRestaurantScore(savedFeedback.getRestaurantId());
-        return savedFeedback;
+        return feedbackMapper.toView(savedFeedback);
     }
 
     public void removeFeedback(Long id) {
-        // Логика немного сложнее, чтобы найти restaurantId до удаления
         feedbackStorage.getAll().stream()
                 .filter(f -> f.getId().equals(id))
                 .findFirst()
@@ -37,8 +41,10 @@ public class FeedbackService {
                 });
     }
 
-    public List<Feedback> getAllFeedback() {
-        return feedbackStorage.getAll();
+    public List<FeedbackDtos.FeedbackView> getAllFeedback() {
+        return feedbackStorage.getAll().stream()
+                .map(feedbackMapper::toView)
+                .collect(Collectors.toList());
     }
 
     private void recalculateRestaurantScore(Long restaurantId) {
