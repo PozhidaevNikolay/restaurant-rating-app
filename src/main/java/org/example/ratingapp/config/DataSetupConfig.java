@@ -4,9 +4,9 @@ import org.example.ratingapp.logic.FeedbackService;
 import org.example.ratingapp.logic.RestaurantService;
 import org.example.ratingapp.logic.VisitorService;
 import org.example.ratingapp.model.Cuisine;
-import org.example.ratingapp.web.dto.FeedbackDtos;
-import org.example.ratingapp.web.dto.RestaurantDtos;
-import org.example.ratingapp.web.dto.VisitorDtos;
+import org.example.ratingapp.dto.FeedbackDtos;
+import org.example.ratingapp.dto.RestaurantDtos;
+import org.example.ratingapp.dto.VisitorDtos;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,6 @@ public class DataSetupConfig {
             if (visitorService.getAllVisitors().isEmpty()) {
                 System.out.println(">>> База данных пуста. Заполняем начальными данными...");
 
-
                 var visitor1 = visitorService.addVisitor(new VisitorDtos.NewVisitor("Алексей", 32, 'М'));
                 var visitor2 = visitorService.addVisitor(new VisitorDtos.NewVisitor("Елена", 28, 'Ж'));
 
@@ -36,6 +35,12 @@ public class DataSetupConfig {
 
                 System.out.println(">>> Начальные данные успешно созданы!");
             }
+
+            System.out.println("\n=======================================================================");
+            System.out.println("===== Приложение запущено. API доступно по адресу http://localhost:8080 =====");
+            System.out.println("===== Документация Swagger UI: http://localhost:8080/swagger-ui.html =====");
+            System.out.println("===== Консоль H2 DB: http://localhost:8080/h2-console =====");
+            System.out.println("=======================================================================");
         };
     }
 }
