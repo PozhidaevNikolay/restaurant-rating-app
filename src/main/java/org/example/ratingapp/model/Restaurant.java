@@ -19,6 +19,6 @@ public class Restaurant {
         this.summary = summary;
         this.cuisine = cuisine;
         this.avgBill = avgBill;
-        this.score = BigDecimal.ZERO; // Инициализируем сразу
+        this.score = BigDecimal.ZERO;
     }
 }
